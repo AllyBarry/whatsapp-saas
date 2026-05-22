@@ -1,0 +1,3 @@
+# SPA fallback — React Router handles client-side routing.
+# Vite copies public/ into dist/, so this ships with the build.
+/*  /index.html  200

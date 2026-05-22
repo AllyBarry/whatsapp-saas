@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: whatsapp
+      POSTGRES_PASSWORD: whatsapp
+      POSTGRES_DB: whatsapp_saas
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U whatsapp -d whatsapp_saas"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Optional — queue-ready. Not required by the MVP.
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://whatsapp:whatsapp@postgres:5432/whatsapp_saas
+      JWT_SECRET: dev-jwt-secret-change-in-production
+      ENCRYPTION_KEY: dev-encryption-secret-change-in-production
+      META_GRAPH_VERSION: v22.0
+      ENVIRONMENT: development
+      CORS_ORIGINS: http://localhost:5173,http://localhost:3000
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:8000
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
