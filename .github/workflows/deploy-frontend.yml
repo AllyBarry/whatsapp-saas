@@ -21,6 +21,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Secrets/variables live under the "prod" GitHub Environment; the job must
+    # opt into that environment for them to be available.
+    environment: prod
     permissions:
       contents: read
       deployments: write
