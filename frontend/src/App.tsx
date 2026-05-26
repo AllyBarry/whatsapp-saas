@@ -9,6 +9,7 @@ import Register from "@/pages/Register";
 import Dashboard from "@/pages/Dashboard";
 import Numbers from "@/pages/Numbers";
 import Templates from "@/pages/Templates";
+import CreateTemplate from "@/pages/CreateTemplate";
 import SendMessage from "@/pages/SendMessage";
 import Conversations from "@/pages/Conversations";
 import Settings from "@/pages/Settings";
@@ -38,6 +39,7 @@ export default function App() {
             <Route index element={<Dashboard />} />
             <Route path="numbers" element={<Numbers />} />
             <Route path="templates" element={<Templates />} />
+            <Route path="templates/new" element={<CreateTemplate />} />
             <Route path="send" element={<SendMessage />} />
             <Route path="conversations" element={<Conversations />} />
             <Route path="settings" element={<Settings />} />

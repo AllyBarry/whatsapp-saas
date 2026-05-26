@@ -16,6 +16,7 @@ import type {
   Plan,
   Subscription,
   Template,
+  TemplateCreateBody,
   Tenant,
   User,
   WhatsAppNumber,
@@ -335,6 +336,32 @@ export const templateApi = {
     await delay(700);
     const state = load();
     return { synced: state.templates.length, created: 0, updated: state.templates.length };
+  },
+  async create(body: TemplateCreateBody): Promise<Template> {
+    await delay(500);
+    return update((state) => {
+      if (state.templates.some((t) => t.name === body.name && t.language === body.language)) {
+        throw new Error("A template with this name and language already exists");
+      }
+      const template: Template = {
+        id: `t-${Math.random().toString(36).slice(2, 8)}`,
+        meta_template_id: null,
+        name: body.name,
+        language: body.language,
+        category: body.category,
+        // Demo: skip Meta review — show as APPROVED so it's immediately usable.
+        status: body.submit_to_meta ? "PENDING" : "LOCAL",
+        template_json: {
+          name: body.name,
+          language: body.language,
+          category: body.category,
+          components: body.components as unknown as Record<string, unknown>[],
+        },
+        created_at: new Date().toISOString(),
+      };
+      state.templates.unshift(template);
+      return template;
+    });
   },
 };
 

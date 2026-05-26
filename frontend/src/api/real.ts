@@ -7,6 +7,7 @@ import type {
   PlanInfo,
   Subscription,
   Template,
+  TemplateCreateBody,
   Tenant,
   User,
   WhatsAppNumber,
@@ -59,6 +60,8 @@ export const templateApi = {
     api
       .post("/api/v1/templates/sync")
       .then((r) => unwrap<{ synced: number; created: number; updated: number }>(r.data)),
+  create: (body: TemplateCreateBody) =>
+    api.post("/api/v1/templates", body).then((r) => unwrap<Template>(r.data)),
 };
 
 // --- Messages ---

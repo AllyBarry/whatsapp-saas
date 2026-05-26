@@ -78,6 +78,24 @@ export interface Template {
   created_at: string;
 }
 
+export type TemplateCategory = "MARKETING" | "UTILITY" | "AUTHENTICATION";
+
+export interface TemplateComponent {
+  type: "HEADER" | "BODY" | "FOOTER" | "BUTTONS";
+  format?: string;
+  text?: string;
+  example?: { body_text?: string[][]; header_text?: string[] };
+  buttons?: Array<Record<string, unknown>>;
+}
+
+export interface TemplateCreateBody {
+  name: string;
+  language: string;
+  category: TemplateCategory;
+  components: TemplateComponent[];
+  submit_to_meta: boolean;
+}
+
 export interface ConversationEvent {
   id: string;
   event_type: string;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { templateApi } from "@/api/endpoints";
 import type { Template } from "@/types";
@@ -25,6 +26,7 @@ function templateBody(t: Template): string {
 
 export default function Templates() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState<Template | null>(null);
 
@@ -44,9 +46,14 @@ export default function Templates() {
         title="Templates"
         subtitle="Message templates synced from Meta"
         action={
-          <Button onClick={() => sync.mutate()} loading={sync.isPending}>
-            Sync templates
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="secondary" onClick={() => sync.mutate()} loading={sync.isPending}>
+              Sync templates
+            </Button>
+            <Button onClick={() => navigate("/app/templates/new")}>
+              + New template
+            </Button>
+          </div>
         }
       />
 
